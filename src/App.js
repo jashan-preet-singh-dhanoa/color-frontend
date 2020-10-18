@@ -18,7 +18,7 @@ const callAPI = async (finalTotal) => {
   setLoading(true);
   await axios
   .get(
-    `http://localhost:8000/api/rgb/color-code?limit=${finalTotal || limit}`,
+    `https://colorbackend.herokuapp.com/api/rgb/color-code?limit=${finalTotal || limit}`,
     {
       headers: {
         Authorization: "$#$#@##@ds%$%^&76@@93432$#%^#$#Dfdfd$%@#@)IOIkjkj&*$%^%*()6",
