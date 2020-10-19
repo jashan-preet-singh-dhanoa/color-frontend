@@ -1,32 +1,22 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import './App.css';
 import axios from "axios";
-const colorArr = [];
+
 function App() {
 const [colorCode, setColorCode] = useState([]);
-const [total, setTotal] = useState(1000);
-const [limit, setLimit] = useState(1000);
+const [total, setTotal] = useState(5000);
+const [limit, setLimit] = useState(5000);
 const [loading, setLoading] = useState(false);
-  useEffect(()=>{
-    if((total+1000)>=limit){
-        callAPI();
-    }
-  },[limit, total])
-
-const callAPI = async (finalTotal) => {
+  
+const callAPI =useCallback(async (finalTotal) => {
   setLoading(true);
   await axios
   .get(
-    `https://colorbackend.herokuapp.com/api/rgb/color-code?limit=${finalTotal || limit}`,
-    {
-      headers: {
-        Authorization: "$#$#@##@ds%$%^&76@@93432$#%^#$#Dfdfd$%@#@)IOIkjkj&*$%^%*()6",
-      },
-    }
+    `http://localhost:8000/api/rgb/color-code?limit=${finalTotal || limit}`
   )
   .then((res) => {
-    setLimit(limit+1000);
+    setLimit(limit+5000);
  setColorCode(res.data.data);
  setTotal(res.data.total);
  setLoading(false);
@@ -35,19 +25,25 @@ const callAPI = async (finalTotal) => {
     console.log(error);
     setLoading(false);
   });
-}
+},[limit]);
+
+useEffect(()=>{
+  if((total+5000)>=limit){
+      callAPI();
+  }
+},[limit, total, callAPI]);
   const ColorDiv = () => {
     return colorCode
     .map((data, index) => {
        return (  
-         <MDBCol style={{ background: `${data}`, width:'20px', height:'20px', margin:'5px' }} key={index} ></MDBCol>
+         <div className="color-container" style={{ background: `${data}` }} key={index} ></div>
         );
  });
   }
 
   return (
     <MDBContainer className="text-center"> 
-        <MDBRow>
+        <MDBRow className="wrap-container mt-5"> 
           {ColorDiv()}
           {loading ? 'Loading....' : null}
       </MDBRow>
